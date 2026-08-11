@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#EBEAE4">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Macro Tape">
+<title>マクロ日次テープ — 2026-08-11</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper:#EBEAE4; --ink:#1A1E1B; --muted:#6E7169; --rule:#C8C7BE;
+    --up:#B3421E; --down:#2C6E7F; --flag:#9A7B10;
+  }
+  * { box-sizing:border-box; }
+  body {
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:"Noto Sans JP","IBM Plex Sans Condensed",sans-serif;
+    font-size:14px; line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap { max-width:1080px; margin:0 auto; padding:36px 24px 72px; }
+
+  /* ── ヘッダー：テープの見出し */
+  header { border-bottom:2px solid var(--ink); padding-bottom:14px; }
+  .masthead { display:flex; justify-content:space-between; align-items:baseline; gap:10px 16px; flex-wrap:wrap; }
+  h1 {
+    font-family:"IBM Plex Sans Condensed",sans-serif; font-weight:700;
+    font-size:clamp(24px,4vw,34px); letter-spacing:.14em; margin:0; text-transform:uppercase;
+  }
+  .tag { margin:4px 0 0; font-size:12px; color:var(--muted); letter-spacing:.08em; }
+  .stamp { font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--muted); letter-spacing:.06em; }
+
+  .regime { margin-top:18px; display:flex; gap:14px; align-items:flex-start; }
+  .regime .pin { width:9px; height:9px; margin-top:7px; background:var(--flag); flex:none; }
+  .regime h3 {
+    margin:0; font-family:"IBM Plex Sans Condensed",sans-serif;
+    font-size:17px; letter-spacing:.03em;
+  }
+  .regime p { margin:3px 0 0; color:var(--muted); font-size:13px; max-width:64ch; }
+
+  .links { margin-top:16px; display:flex; gap:8px; flex-wrap:wrap; }
+  .links a {
+    font-family:"IBM Plex Mono",monospace; font-size:11.5px; letter-spacing:.04em;
+    text-decoration:none; color:var(--ink); border:1px solid var(--rule);
+    padding:5px 10px; background:transparent; transition:background .15s,border-color .15s;
+  }
+  .links a:hover { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .links a:focus-visible { outline:2px solid var(--flag); outline-offset:2px; }
+
+  /* ── セクション */
+  .block { margin-top:38px; }
+  .eyebrow { display:flex; align-items:baseline; gap:22px; border-bottom:1px solid var(--ink); padding-bottom:7px; flex-wrap:wrap; }
+  .eyebrow h2 {
+    font-family:"IBM Plex Sans Condensed",sans-serif; font-weight:600;
+    font-size:13px; letter-spacing:.2em; text-transform:uppercase; margin:0; white-space:nowrap;
+  }
+  .eyebrow p { margin:0 0 0 10px; font-size:12px; color:var(--muted); }
+
+  table { width:100%; border-collapse:collapse; }
+  thead th {
+    font-family:"IBM Plex Mono",monospace; font-weight:500; font-size:10.5px;
+    letter-spacing:.09em; color:var(--muted); text-transform:uppercase;
+    text-align:right; padding:9px 8px 7px; border-bottom:1px solid var(--rule); white-space:nowrap;
+  }
+  thead th.left { text-align:left; }
+  tbody th { text-align:left; font-weight:400; padding:11px 8px 11px 0; vertical-align:top; }
+  .lbl { display:block; font-weight:500; font-size:14px; }
+  .note { display:block; font-size:11.5px; color:var(--muted); margin-top:2px; max-width:46ch; }
+  tbody td { padding:11px 8px; border-bottom:1px solid var(--rule); vertical-align:middle; }
+  tbody th { border-bottom:1px solid var(--rule); }
+  .row:hover td, .row:hover th { background:rgba(26,30,27,.035); }
+  .num { font-family:"IBM Plex Mono",monospace; text-align:right; font-size:13px; white-space:nowrap; font-variant-numeric:tabular-nums; }
+  .lead { font-size:16px; font-weight:600; }
+  .up { color:var(--up); } .down { color:var(--down); } .flat { color:var(--muted); }
+  .dim { color:var(--muted); }
+  .kind, .asof { font-size:11px; color:var(--muted); }
+  .err .lbl { color:var(--muted); }
+
+  /* ── 1年レンジ内の位置 */
+  .bar { width:92px; }
+  .rng { position:relative; display:block; height:3px; background:var(--rule); }
+  .rng-tick { position:absolute; top:-3px; width:2px; height:9px; background:var(--ink); transform:translateX(-1px); }
+  .sp { width:112px; }
+  .spark { display:block; }
+
+  footer { margin-top:44px; padding-top:14px; border-top:1px solid var(--rule); font-size:11.5px; color:var(--muted); }
+  footer p { margin:5px 0; max-width:74ch; }
+
+  @media (max-width:720px) {
+    .wrap { padding:24px 16px 56px; }
+    thead, .bar { display:none; }
+    table, tbody, tbody tr, tbody th, tbody td { display:block; }
+
+    tbody tr.row {
+      display:grid; align-items:center; column-gap:12px;
+      grid-template-columns:repeat(3, minmax(0,1fr)) 92px;
+      grid-template-areas:"lbl lbl lbl lbl" "val val val sp" "d1 w1 m1 sp";
+      padding:14px 0; border-bottom:1px solid var(--rule);
+    }
+    tbody tr.row:last-child { border-bottom:none; }
+    tbody th { grid-area:lbl; padding:0 0 8px; border:none; }
+    .note { font-size:11px; max-width:none; }
+    tbody td, tbody td.num { border:none; padding:0; text-align:left; }
+    .lead { grid-area:val; font-size:22px; padding-bottom:8px; }
+    .d1 { grid-area:d1; } .w1 { grid-area:w1; } .m1 { grid-area:m1; }
+    .d1::before, .w1::before, .m1::before {
+      content:attr(data-k); display:block; font-size:9.5px; letter-spacing:.1em;
+      color:var(--muted); margin-bottom:1px;
+    }
+    .sp { grid-area:sp; justify-self:end; }
+    .spark { width:92px; height:34px; }
+    .kind, .asof { display:inline-block; margin-right:12px; }
+
+    /* イベント行は3列構成 */
+    .block:last-of-type tbody tr.row {
+      grid-template-columns:1fr auto;
+      grid-template-areas:"lbl lbl" "val val" "kind asof";
+    }
+    .block:last-of-type .kind { grid-area:kind; }
+    .block:last-of-type .asof { grid-area:asof; justify-self:end; }
+  }
+  @media (prefers-reduced-motion:reduce) { * { transition:none !important; } }
+</style></head>
+<body><div class="wrap">
+
+<header>
+  <div class="masthead">
+    <div><h1>Macro Tape</h1><p class="tag">米マクロ・毎朝の確認用</p></div>
+    <span class="stamp">生成 2026-08-11 13:14 JST</span>
+  </div>
+  <div class="regime">
+    <span class="pin"></span>
+    <div><h3>判定不可</h3><p>レジーム判定に必要な系列が揃っていません。</p></div>
+  </div>
+  <div class="links">
+    <a href="https://www.cmegroup.com/markets/interest-rates/cme-fedwatch-tool.html" target="_blank" rel="noopener">CME FedWatch（利上げ確率）</a>
+    <a href="https://www.atlantafed.org/cenfis/market-probability-tracker" target="_blank" rel="noopener">Atlanta Fed 確率トラッカー</a>
+    <a href="https://www.bls.gov/schedule/news_release/" target="_blank" rel="noopener">BLS 発表カレンダー</a>
+    <a href="https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm" target="_blank" rel="noopener">FOMC 日程</a>
+  </div>
+</header>
+
+
+  <section class="block">
+    <div class="eyebrow"><h2>金利・インフレ期待</h2><p>名目 = 実質 + 期待インフレ。どちらが動かしたかで意味が変わる</p></div>
+    <table><thead><tr><th class="col left">指標</th><th class="col">最新</th><th class="col">前日</th><th class="col">1週</th><th class="col">1月</th><th class="col">1年レンジ</th><th class="col">120日</th></tr></thead>
+    <tbody><tr class="row err"><th scope="row"><span class="lbl">米10年 名目利回り</span><span class="note">取得失敗: TimeoutError。ネットワークまたは系列IDを確認してください。</span></th><td class="num dim" colspan="6">—</td></tr><tr class="row err"><th scope="row"><span class="lbl">米10年 実質金利 (TIPS)</span><span class="note">取得失敗: TimeoutError。ネットワークまたは系列IDを確認してください。</span></th><td class="num dim" colspan="6">—</td></tr><tr class="row err"><th scope="row"><span class="lbl">米10年 期待インフレ率 (BEI)</span><span class="note">取得失敗: TimeoutError。ネットワークまたは系列IDを確認してください。</span></th><td class="num dim" colspan="6">—</td></tr><tr class="row err"><th scope="row"><span class="lbl">米2年 利回り</span><span class="note">取得失敗: TimeoutError。ネットワークまたは系列IDを確認してください。</span></th><td class="num dim" colspan="6">—</td></tr><tr class="row err"><th scope="row"><span class="lbl">2-10年 スプレッド</span><span class="note">取得失敗: TimeoutError。ネットワークまたは系列IDを確認してください。</span></th><td class="num dim" colspan="6">—</td></tr></tbody></table>
+  </section>
+
+  <section class="block">
+    <div class="eyebrow"><h2>政策金利</h2><p>指標発表への反応は、実数値ではなく織り込みとの差で決まる</p></div>
+    <table><thead><tr><th class="col left">指標</th><th class="col">最新</th><th class="col">前日</th><th class="col">1週</th><th class="col">1月</th><th class="col">1年レンジ</th><th class="col">120日</th></tr></thead>
+    <tbody><tr class="row err"><th scope="row"><span class="lbl">実効FF金利</span><span class="note">取得失敗: TimeoutError。ネットワークまたは系列IDを確認してください。</span></th><td class="num dim" colspan="6">—</td></tr><tr class="row err"><th scope="row"><span class="lbl">利下げ織り込み 目安</span><span class="note">元系列の取得失敗。ネットワークまたは系列IDを確認してください。</span></th><td class="num dim" colspan="6">—</td></tr></tbody></table>
+  </section>
+
+  <section class="block">
+    <div class="eyebrow"><h2>リスク・クレジット</h2><p>株価より先に動く。毎朝ここだけは飛ばさない</p></div>
+    <table><thead><tr><th class="col left">指標</th><th class="col">最新</th><th class="col">前日</th><th class="col">1週</th><th class="col">1月</th><th class="col">1年レンジ</th><th class="col">120日</th></tr></thead>
+    <tbody><tr class="row err"><th scope="row"><span class="lbl">HY クレジットスプレッド (OAS)</span><span class="note">取得失敗: TimeoutError。ネットワークまたは系列IDを確認してください。</span></th><td class="num dim" colspan="6">—</td></tr><tr class="row err"><th scope="row"><span class="lbl">IG クレジットスプレッド (OAS)</span><span class="note">取得失敗: TimeoutError。ネットワークまたは系列IDを確認してください。</span></th><td class="num dim" colspan="6">—</td></tr><tr class="row err"><th scope="row"><span class="lbl">VIX</span><span class="note">取得失敗: TimeoutError。ネットワークまたは系列IDを確認してください。</span></th><td class="num dim" colspan="6">—</td></tr></tbody></table>
+  </section>
+
+  <section class="block">
+    <div class="eyebrow"><h2>通貨・コモディティ・株</h2><p>金利と併読して初めて解釈できる</p></div>
+    <table><thead><tr><th class="col left">指標</th><th class="col">最新</th><th class="col">前日</th><th class="col">1週</th><th class="col">1月</th><th class="col">1年レンジ</th><th class="col">120日</th></tr></thead>
+    <tbody><tr class="row err"><th scope="row"><span class="lbl">ドル指数 (広義・名目)</span><span class="note">取得失敗: TimeoutError。ネットワークまたは系列IDを確認してください。</span></th><td class="num dim" colspan="6">—</td></tr><tr class="row err"><th scope="row"><span class="lbl">金 (ドル建て)</span><span class="note">取得失敗: Stooqが想定外の応答を返しました。ネットワークまたは系列IDを確認してください。</span></th><td class="num dim" colspan="6">—</td></tr><tr class="row err"><th scope="row"><span class="lbl">WTI原油</span><span class="note">取得失敗: TimeoutError。ネットワークまたは系列IDを確認してください。</span></th><td class="num dim" colspan="6">—</td></tr><tr class="row err"><th scope="row"><span class="lbl">S&P 500</span><span class="note">取得失敗: TimeoutError。ネットワークまたは系列IDを確認してください。</span></th><td class="num dim" colspan="6">—</td></tr></tbody></table>
+  </section>
+
+  <section class="block">
+    <div class="eyebrow"><h2>マクロ（イベント）</h2><p>日次では動かない。発表日に確認する</p></div>
+    <table><thead><tr><th class="col left">指標</th><th class="col">変化</th><th class="col">基準</th><th class="col">更新</th></tr></thead>
+    <tbody><tr class="row err"><th scope="row"><span class="lbl">新規失業保険申請件数</span><span class="note">取得失敗: TimeoutError</span></th><td class="num dim" colspan="3">—</td></tr><tr class="row err"><th scope="row"><span class="lbl">非農業部門雇用者数</span><span class="note">取得失敗: TimeoutError</span></th><td class="num dim" colspan="3">—</td></tr><tr class="row err"><th scope="row"><span class="lbl">失業率</span><span class="note">取得失敗: TimeoutError</span></th><td class="num dim" colspan="3">—</td></tr><tr class="row err"><th scope="row"><span class="lbl">CPI (総合)</span><span class="note">取得失敗: TimeoutError</span></th><td class="num dim" colspan="3">—</td></tr><tr class="row err"><th scope="row"><span class="lbl">CPI (コア)</span><span class="note">取得失敗: TimeoutError</span></th><td class="num dim" colspan="3">—</td></tr><tr class="row err"><th scope="row"><span class="lbl">コアPCE デフレーター</span><span class="note">取得失敗: TimeoutError</span></th><td class="num dim" colspan="3">—</td></tr><tr class="row err"><th scope="row"><span class="lbl">実質GDP</span><span class="note">取得失敗: TimeoutError</span></th><td class="num dim" colspan="3">—</td></tr></tbody></table>
+  </section>
+
+<footer>
+  <p>データ: FRED（セントルイス連銀）/ Stooq（金スポット）。FREDの日次系列は1営業日程度遅れて公開されます。</p>
+  <p>ドル指数は広義名目ドル指数 DTWEXBGS。ICEのDXYとは構成通貨・ウェイトが異なります。</p>
+  <p>「利下げ織り込み 目安」は1年債利回り − 実効FF金利による簡易プロキシです。正式な確率分布はFedWatchを参照してください。</p>
+  <p>本ページは指標の集約表示のみを行うもので、投資助言ではありません。</p>
+</footer>
+
+</div></body></html>
